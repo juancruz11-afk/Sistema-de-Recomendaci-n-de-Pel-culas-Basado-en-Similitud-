@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>recomendaciones</title>
+</head>
+<body>
+    <h1>recomendaciones para el usuario {{ user }}</h1>
+
+    <ul>
+        {% for pelicula in recs %}
+        <li>{{ pelicula }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="/">volver</a>
+</body>
+</html>

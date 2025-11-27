@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>recomendador de películas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">recomendador</a>
+      </div>
+    </nav>
+
+    <main class="container py-4">
+      <h2 class="mb-3">elige tu usuario y filtros</h2>
+
+      <form action="/recomendar" method="post" class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">usuario</label>
+          <select name="user" class="form-select">
+            {% for u in usuarios %}
+            <option value="{{ u }}">{{ u }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">género (filtro)</label>
+          <select name="genero" class="form-select">
+            <option value="">todos</option>
+            {% for g in generos %}
+            <option value="{{ g }}">{{ g }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label">min rating</label>
+          <input type="number" step="0.1" min="0" max="5" name="min_rating" class="form-control" placeholder="0">
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label">año</label>
+          <input type="text" name="year" class="form-control" placeholder="ej. 1999">
+        </div>
+
+        <div class="col-md-12">
+          <button class="btn btn-primary mt-2">ver recomendaciones</button>
+        </div>
+      </form>
+    </main>
+  </body>
+</html>
