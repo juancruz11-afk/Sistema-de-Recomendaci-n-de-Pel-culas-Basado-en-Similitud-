@@ -9,26 +9,37 @@ from posters import PosterFetcher
 
 class Recomendador:
     def __init__(self, data_folder="data"):
+        # Cargar archivos CSV
         self.movies = pd.read_csv(f"{data_folder}/movies.csv")
         self.ratings = pd.read_csv(f"{data_folder}/ratings.csv")
 
-        # procesar géneros one-hot
+        # --- OPTIMIZACIÓN DE MEMORIA (LA DIETA) ---
+        # 1. Contamos cuántos ratings tiene cada película
+        conteo_ratings = self.ratings['movieId'].value_counts()
+        
+        # 2. Nos quedamos solo con las 2500 películas más populares
+        # (Esto reduce drásticamente el uso de RAM y CPU)
+        top_movies_ids = conteo_ratings.head(2500).index
+        
+        # 3. Filtramos los dataframes para borrar el resto
+        self.movies = self.movies[self.movies['movieId'].isin(top_movies_ids)]
+        self.ratings = self.ratings[self.ratings['movieId'].isin(top_movies_ids)]
+        # ------------------------------------------
+
+        # Procesar géneros one-hot (ahora con menos datos)
         self.genres_dummies = self.movies["genres"].str.get_dummies(sep="|")
         self.movies = pd.concat([self.movies, self.genres_dummies], axis=1)
 
-        # promedio rating por movie
+        # Promedio rating por movie
         movie_ratings = self.ratings.groupby("movieId")["rating"].mean().rename("avg_rating")
         self.movies = self.movies.merge(movie_ratings, on="movieId", how="left")
         self.movies["avg_rating"].fillna(0, inplace=True)
 
-        # crear grafo usuario-pelicula
+        # Crear grafo usuario-pelicula (ahora el grafo será más pequeño y ligero)
         self.grafo = UsuarioPeliculaGrafo(self.ratings)
 
-        # poster fetcher (tmdb)
+        # Poster fetcher
         self.poster_fetcher = PosterFetcher()
-
-    def get_all_genres(self):
-        return list(self.genres_dummies.columns)
 
     def get_user_ratings(self, user_id):
         # retorna dataframe con las películas que calificó el usuario y su rating
