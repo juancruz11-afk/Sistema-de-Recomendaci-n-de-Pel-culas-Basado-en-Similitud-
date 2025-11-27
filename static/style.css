@@ -1,2 +1,115 @@
-/* estilos personalizados - opcional */
-body { font-family: Arial, sans-serif; }
+/* static/style.css */
+body {
+    background-color: #141414; /* Fondo negro Netflix */
+    color: #fff;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #000000 !important; /* Negro total */
+    border-bottom: 1px solid #333;
+}
+.navbar-brand {
+    color: #E50914 !important; /* Rojo Netflix */
+    font-weight: bold;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+/* Contenedor Principal (Index) */
+.hero-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                url('https://assets.nflxext.com/ffe/siteui/vlv3/f841d4c7-10e1-40af-bcae-07a3f8dc141a/f6d7434e-d6de-4185-a6d4-c77a2d08737b/US-en-20220502-popsignuptwoweeks-perspective_alpha_website_medium.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.login-card {
+    background-color: rgba(0, 0, 0, 0.75);
+    padding: 60px;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 450px;
+}
+
+.form-label {
+    color: #8c8c8c;
+    font-size: 0.9rem;
+}
+
+.form-control, .form-select {
+    background-color: #333;
+    border: none;
+    color: #fff;
+    height: 50px;
+}
+.form-control:focus, .form-select:focus {
+    background-color: #454545;
+    color: #fff;
+    box-shadow: none;
+    border: 1px solid #555;
+}
+
+.btn-netflix {
+    background-color: #E50914;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    height: 50px;
+    width: 100%;
+    margin-top: 20px;
+}
+.btn-netflix:hover {
+    background-color: #f40612;
+    color: #fff;
+}
+
+/* Tarjetas de Películas (Recomendaciones) */
+.movie-card {
+    background-color: #2f2f2f;
+    border: none;
+    transition: transform 0.3s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+.movie-card:hover {
+    transform: scale(1.05); /* Efecto zoom al pasar mouse */
+    z-index: 10;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.card-img-top {
+    height: 400px;
+    object-fit: cover;
+}
+
+.card-body {
+    background-color: #181818;
+    color: #fff;
+}
+
+.badge-score {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #E50914;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* Tablas */
+.table-dark-custom {
+    background-color: #181818;
+    color: #ccc;
+}
+.table-dark-custom th, .table-dark-custom td {
+    border-color: #333;
+}

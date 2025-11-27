@@ -1,9 +1,10 @@
 # posters.py
 import os
 import requests
-from urllib.parse import quote_plus
+import re  # <--- IMPORTANTE: Necesario para limpiar el título
 from dotenv import load_dotenv
 
+# Cargar variables de entorno
 load_dotenv()
 TMDB_API_KEY = os.getenv("TMDB_API_KEY")
 
@@ -16,22 +17,40 @@ class PosterFetcher:
     def get_poster_url(self, title):
         if not self.api_key:
             return None
+        
+        # --- MEJORA: LIMPIEZA DE TÍTULO ---
+        # El dataset trae títulos como "Jumanji (1995)".
+        # Esta línea borra el " (1995)" para buscar solo "Jumanji"
+        clean_title = re.sub(r'\s*\(\d{4}\)$', '', title)
+        
+        # Mensaje en terminal para que veas qué está pasando
+        print(f"Buscando: '{clean_title}' ...", end=" ")
+
         try:
             params = {
                 "api_key": self.api_key,
-                "query": title,
-                "include_adult": False,
-                "language": "en-US",
+                "query": clean_title,
+                "include_adult": "false",
+                "language": "en-US", 
                 "page": 1
             }
-            r = requests.get(self.base_search, params=params, timeout=5)
-            data = r.json()
-            results = data.get("results")
-            if results:
-                poster_path = results[0].get("poster_path")
-                if poster_path:
-                    return self.base_image + poster_path
+            # Timeout de 3 segundos para que no se congele si internet falla
+            r = requests.get(self.base_search, params=params, timeout=3)
+            
+            if r.status_code == 200:
+                data = r.json()
+                results = data.get("results")
+                if results:
+                    poster_path = results[0].get("poster_path")
+                    if poster_path:
+                        print("¡Encontrado!")
+                        return self.base_image + poster_path
+                print("Sin resultados")
+            else:
+                print(f"Error API: {r.status_code}")
+
         except Exception as e:
-            # error silencioso para no romper la app
+            print(f"Excepción: {e}")
             pass
+        
         return None
