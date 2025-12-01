@@ -3,11 +3,13 @@ from flask import Flask, render_template, request
 from recomendador import Recomendador
 import os
 
-app = Flask(__name__)
+# MODIFICACIÓN CRÍTICA: Indicamos a Flask que la carpeta static está un nivel arriba (../static)
+app = Flask(__name__, static_folder='../static')
 reco = Recomendador(data_folder="data")
 
 # obtener lista de usuarios
-usuarios = sorted(reco.ratings["userId"].unique())
+usuarios_completos = sorted(reco.ratings["userId"].unique())
+usuarios = usuarios_completos[:5] # <-- Límite a los 5 primeros usuarios
 
 @app.route("/")
 def index():

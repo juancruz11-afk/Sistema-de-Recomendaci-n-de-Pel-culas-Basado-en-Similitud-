@@ -113,3 +113,131 @@ body {
 .table-dark-custom th, .table-dark-custom td {
     border-color: #333;
 }
+
+
+/* static/mystyle.css */
+
+/* Variables de color de referencia */
+:root {
+    --netflix-red: #E50914;
+    --dark-bg: #141414;
+    --card-bg: rgba(0, 0, 0, 0.75);
+    --text-light: #fff;
+    --text-muted: #8c8c8c;
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: var(--text-light);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #000000 !important;
+    border-bottom: 1px solid #333;
+}
+.navbar-brand {
+    color: var(--netflix-red) !important;
+    font-weight: bold;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+/* Contenedor Principal (Index) */
+.hero-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                url('https://assets.nflxext.com/ffe/siteui/vlv3/f841d4c7-10e1-40af-bcae-07a3f8dc141a/f6d7434e-d6de-4185-a6d4-c77a2d08737b/US-en-20220502-popsignuptwoweeks-perspective_alpha_website_medium.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.login-card {
+    background-color: var(--card-bg);
+    padding: 60px;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 450px;
+    color: var(--text-light); /* Asegura que el texto sea blanco */
+}
+
+.form-label {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.form-control, .form-select {
+    background-color: #333;
+    border: none;
+    color: var(--text-light);
+    height: 50px;
+}
+.form-control:focus, .form-select:focus {
+    background-color: #454545;
+    color: var(--text-light);
+    box-shadow: none;
+    border: 1px solid #555;
+}
+
+.btn-netflix {
+    background-color: var(--netflix-red);
+    color: var(--text-light);
+    font-weight: bold;
+    border: none;
+    height: 50px;
+    width: 100%;
+    margin-top: 20px;
+}
+.btn-netflix:hover {
+    background-color: #f40612;
+    color: var(--text-light);
+}
+
+/* Estilos de la página de recomendaciones (aunque están en un archivo aparte, se incluyen aquí) */
+
+.movie-card {
+    background-color: #2f2f2f;
+    border: none;
+    transition: transform 0.3s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+.movie-card:hover {
+    transform: scale(1.05);
+    z-index: 10;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.card-img-top {
+    height: 400px;
+    object-fit: cover;
+}
+
+.card-body {
+    background-color: #181818;
+    color: var(--text-light);
+}
+
+.badge-score {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: var(--netflix-red);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.table-dark-custom {
+    background-color: #181818;
+    color: #ccc;
+}
+.table-dark-custom th, .table-dark-custom td {
+    border-color: #333;
+}
