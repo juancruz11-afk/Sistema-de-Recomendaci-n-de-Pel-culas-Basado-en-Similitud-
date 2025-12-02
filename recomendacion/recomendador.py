@@ -13,20 +13,17 @@ class Recomendador:
         self.movies = pd.read_csv(f"{data_folder}/movies.csv")
         self.ratings = pd.read_csv(f"{data_folder}/ratings.csv")
 
-        # --- OPTIMIZACIÓN DE MEMORIA (LA DIETA) ---
-        # 1. Contamos cuántos ratings tiene cada película
+        # 1. Contamos cuantos ratings tiene cada pelicula
         conteo_ratings = self.ratings['movieId'].value_counts()
         
-        # 2. Nos quedamos solo con las 2500 películas más populares
-        # (Esto reduce drásticamente el uso de RAM y CPU)
+        # 2. limitamos solo a 2500 peliculas
         top_movies_ids = conteo_ratings.head(2500).index
         
         # 3. Filtramos los dataframes para borrar el resto
         self.movies = self.movies[self.movies['movieId'].isin(top_movies_ids)]
         self.ratings = self.ratings[self.ratings['movieId'].isin(top_movies_ids)]
-        # ------------------------------------------
 
-        # Procesar géneros one-hot (ahora con menos datos)
+        # Procesa los generos one-hot (ahora con menos datos)
         self.genres_dummies = self.movies["genres"].str.get_dummies(sep="|")
         self.movies = pd.concat([self.movies, self.genres_dummies], axis=1)
 
@@ -34,20 +31,20 @@ class Recomendador:
         movie_ratings = self.ratings.groupby("movieId")["rating"].mean().rename("avg_rating")
         self.movies = self.movies.merge(movie_ratings, on="movieId", how="left")
         
-        # Corrección de advertencia de Pandas
+        # Advertencia de Pandas
         self.movies["avg_rating"] = self.movies["avg_rating"].fillna(0)
 
-        # Crear grafo usuario-pelicula (ahora el grafo será más pequeño y ligero)
+        # Crea el grafo usuario-pelicula
         self.grafo = UsuarioPeliculaGrafo(self.ratings)
 
-        # Poster fetcher
+        # Muestra los Poster
         self.poster_fetcher = PosterFetcher()
 
     def get_all_genres(self):
         return list(self.genres_dummies.columns)
 
     def get_user_ratings(self, user_id):
-        # Retorna dataframe con las películas que calificó el usuario y su rating
+        # Muestra las peliculas que califico el usuario y su rating
         ur = self.ratings[self.ratings["userId"] == user_id].merge(
             self.movies[["movieId","title","avg_rating"]], on="movieId", how="left"
         )
@@ -61,7 +58,7 @@ class Recomendador:
 
         peliculas_vistas = set(user_data["movieId"].tolist())
 
-        # Vector de preferencias por género
+        # Vector de preferencias por genero
         watched_movies = self.movies[self.movies["movieId"].isin(peliculas_vistas)]
         if watched_movies.empty:
             user_genre_vector = np.zeros(len(self.genres_dummies.columns)).reshape(1,-1)
@@ -73,11 +70,11 @@ class Recomendador:
             weighted = (genre_matrix * weights).sum(axis=0)
             user_genre_vector = (weighted / (weights.sum()+1e-9)).reshape(1,-1)
 
-        # Similitud coseno por géneros
+        # Similitud coseno por generos
         movies_vectors = self.movies[self.genres_dummies.columns].values
         cos_sim = cosine_similarity(user_genre_vector, movies_vectors)[0]
 
-        # DP: Alineamiento entre secuencia de géneros
+        # DP: Alineamiento entre secuencia de generos
         dp_scores = []
         user_genre_sequence = self._user_genre_sequence(user_id)
         for idx, row in self.movies.iterrows():

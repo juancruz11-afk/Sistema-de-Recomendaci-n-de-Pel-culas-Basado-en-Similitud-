@@ -18,12 +18,10 @@ class PosterFetcher:
         if not self.api_key:
             return None
         
-        # --- MEJORA: LIMPIEZA DE TÍTULO ---
-        # El dataset trae títulos como "Jumanji (1995)".
-        # Esta línea borra el " (1995)" para buscar solo "Jumanji"
+        # Esta linea borra el " (1995)" para buscar solo "Jumanji"
         clean_title = re.sub(r'\s*\(\d{4}\)$', '', title)
         
-        # Mensaje en terminal para que veas qué está pasando
+        # Mensaje en terminal para que se vea que esta pasando
         print(f"Buscando: '{clean_title}' ...", end=" ")
 
         try:

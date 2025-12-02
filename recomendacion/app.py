@@ -3,17 +3,16 @@ from flask import Flask, render_template, request
 from recomendador import Recomendador
 import os
 
-# MODIFICACIÓN CRÍTICA: Indicamos a Flask que la carpeta static está un nivel arriba (../static)
 app = Flask(__name__, static_folder='../static')
 reco = Recomendador(data_folder="data")
 
 # obtener lista de usuarios
 usuarios_completos = sorted(reco.ratings["userId"].unique())
-usuarios = usuarios_completos[:5] # <-- Límite a los 5 primeros usuarios
+usuarios = usuarios_completos[:10] # <-- Límite a los 5 primeros usuarios
 
 @app.route("/")
 def index():
-    # géneros disponibles para filtro
+    # generos disponibles para filtro
     generos = reco.get_all_genres()
     return render_template("index.html", usuarios=usuarios, generos=generos)
 
@@ -24,7 +23,7 @@ def recomendar():
     min_rating = float(request.form.get("min_rating") or 0)
     year = request.form.get("year") or None
 
-    # obtener recomendaciones (top 10 internamente, luego mostramos 3 o las que pida)
+    # obteniene recomendaciones 
     recomendaciones = reco.recomendar_peliculas(
         user_id=user,
         n=10,
@@ -33,7 +32,7 @@ def recomendar():
         year=year
     )
 
-    # obtener calificaciones del usuario
+    # obteniene calificaciones del usuario
     calificaciones = reco.get_user_ratings(user)
 
     return render_template(
