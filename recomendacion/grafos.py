@@ -33,7 +33,7 @@ class UsuarioPeliculaGrafo:
         while q:
             typ, node, depth = q.popleft()
             if typ == "u":
-                # expandir a películas
+                # expandir a peliculas
                 for m in self.user_to_movies.get(node, []):
                     if m == target_movie:
                         return depth + 1
@@ -49,7 +49,7 @@ class UsuarioPeliculaGrafo:
         return float("inf")
 
     def proximity_score(self, user_id, movie_id):
-        # score inverso a la distancia: más cercano => mayor score
+        # score inverso a la distancia: mas cercano => mayor score
         d = self.bfs_user_to_movie_distance(user_id, movie_id, max_depth=4)
         if d == float("inf"):
             return 0.0
